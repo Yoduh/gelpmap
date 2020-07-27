@@ -1,6 +1,7 @@
 const createError   = require('http-errors'),
       express       = require('express'),
       path          = require('path'),
+      favicon       = require("serve-favicon"),
       cookieParser  = require('cookie-parser'),
       logger        = require('morgan'),
       cors          = require('cors');
@@ -23,6 +24,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.use(favicon("client/build/favicon.ico"));
+}
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
