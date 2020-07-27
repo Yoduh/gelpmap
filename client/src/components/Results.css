@@ -1,0 +1,24 @@
+.yelpstar {
+    width: 1.4rem;
+    margin-right: 2px
+}
+.starlight {
+    fill: #ffe426;
+    width: 1.5rem;
+}
+.nostar {
+    fill: #5c6066;
+    width: 1.5rem;
+}
+.fa-dollar-sign {
+    color: green;
+}
+
+.card {
+    border: 0px;
+    color: darkgrey;
+}
+
+.card-title {
+    color: #e6e6e6;
+}

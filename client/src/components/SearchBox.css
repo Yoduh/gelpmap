@@ -1,0 +1,10 @@
+.img[src^="data:image/svg"] {
+    fill: url(#gradient) #fff;
+}
+
+.main-stop {
+    stop-color: rgba(30,168,41,1);
+}
+.alt-stop {
+    stop-color: rgba(1,51,0,1);
+}
