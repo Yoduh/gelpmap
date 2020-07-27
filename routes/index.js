@@ -5,7 +5,7 @@ const express = require('express'),
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-const client = yelp.client(process.env.YELP_API_KEY);
+const client = yelp.client(process.env.REACT_APP_YELP_API_KEY);
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
