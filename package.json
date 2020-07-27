@@ -1,9 +1,12 @@
 {
-  "name": "api",
+  "name": "gelp",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start": "nodemon ./bin/www",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
