@@ -15,8 +15,6 @@ let markers = [];
 let didSubmit = false;
 
 const SearchBox = ({map, places, setPlaces}) => {
-    console.log("fffffff");
-    console.log({pin});
     const searchForEl = useRef(null);
     const [bounds, setBounds] = useState({});
     const [target, setTarget] = useState({});
@@ -139,10 +137,10 @@ const SearchBox = ({map, places, setPlaces}) => {
                 // let pin = place.geometry ? googlePin : yelpPin;  // eventually change pins to indicate google only, yelp only, or google+yelp result
                 let icon = {
                     url: pin.toString(),// for SVG: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(pin),
-                    size: new window.google.maps.Size(71, 71),
+                    size: new window.google.maps.Size(40, 40),
                     origin: new window.google.maps.Point(0, 0),
-                    anchor: new window.google.maps.Point(17, 34),
-                    scaledSize: new window.google.maps.Size(25, 25)
+                    anchor: new window.google.maps.Point(20, 40),
+                    scaledSize: new window.google.maps.Size(40, 40)
                 };
             
                 // Create a marker for each place.

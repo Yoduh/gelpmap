@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-  app.use(favicon("client/build/favicon.ico"));
+  app.use(favicon(path.join(__dirname, "client/build", "favicon.ico")));
 }
 
 app.use('/', indexRouter);
