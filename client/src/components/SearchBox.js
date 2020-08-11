@@ -4,6 +4,8 @@ import axios from 'axios';
 import { getRadiusFromLatLonInM } from '../helpers';
 import './SearchBox.css';
 import pin from '../icons/gelp.png';
+// import SearchButton from './SearchButton';
+
 // const svgTemplate = "<svg xmlns='http://www.w3.org/2000/svg' width='6' height='10' viewBox='0 0 20 34.9'><g transform='translate(-814.59595 -274.38623)matrix(1.1855854 0 0 1.1855854 -151.17715 -57.3976)'><path d='m817.1 283c-1.3 1.3-2 3.3-2 5.1 0.1 3.8 1.8 5.3 4.6 10.6 1 2.3 2 4.8 3 8.9 0.1 0.6 0.3 1.2 0.3 1.2 0.1 0 0.2-0.5 0.3-1.1 1-4.1 2-6.5 3-8.9 2.8-5.3 4.5-6.7 4.6-10.6 0-1.8-0.8-3.8-2-5.1-1.4-1.5-3.6-2.7-5.9-2.7-2.3 0-4.5 1.1-5.9 2.6z' style='fill:{{ color }};stroke:#000'/><circle r='3' cy='288.3' cx='823' style='fill:none;opacity:0'/></g></svg>";
 // const googlePin = svgTemplate.replace('{{ color }}', '#1ea829');
 // const yelpPin = svgTemplate.replace('{{ color }}', '#d32323');
@@ -14,14 +16,26 @@ let infowindow;
 let markers = [];
 let didSubmit = false;
 
-const SearchBox = ({map, places, setPlaces}) => {
+const SearchBox = ({map, places, setPlaces, setIsLoading}) => {
     const searchForEl = useRef(null);
     const [bounds, setBounds] = useState({});
     const [target, setTarget] = useState({});
+    const [googleLoaded, setGoogleLoaded] = useState(false);
+    const [yelpLoaded, setYelpLoaded] = useState(false);
 
     useEffect(() => {
         setPlaces({...places, ...target});
+        if (!_.isEmpty(target) && target.googlePlaces !== undefined) {
+            setGoogleLoaded(true);
+        } else if (!_.isEmpty(target) && target.yelpPlaces !== undefined) {
+            setYelpLoaded(true);
+        }
     }, [target])
+
+    useEffect(() => {
+        if(googleLoaded && yelpLoaded)
+            setIsLoading(false);
+    }, [googleLoaded, yelpLoaded]);
 
     useEffect(() => {
         let mapListen;
@@ -50,11 +64,19 @@ const SearchBox = ({map, places, setPlaces}) => {
     }, [map])
 
     const submit = (e) => {
+        setIsLoading(true);
+        setGoogleLoaded(false);
+        setYelpLoaded(false);
         if (e !== undefined)
             e.preventDefault();
         if (map !== null && !_.isEmpty(map) && service !== null && searchForEl.current.value !== '') {
             didSubmit = true;
-            map.setCenter(searchForBox.getPlaces()[0].geometry.location);
+            if (searchForBox.getPlaces()[0])
+                map.setCenter(searchForBox.getPlaces()[0].geometry.location);
+            else {
+                setIsLoading(false); // should also add toast to let user know that no results were found
+                console.log("no places found");
+            }
         }
     }
 
@@ -150,16 +172,29 @@ const SearchBox = ({map, places, setPlaces}) => {
                     title: place.name,
                     position: place.geometry ? place.geometry.location : {lat: place.coordinates.latitude, lng: place.coordinates.longitude}
                     });
-                marker.addListener('click', () => markerClick(marker, place.id));
+                marker.addListener('click', () => markerClick(marker, place.geometry ? place.place_id : place.alias));
                 markers.push(marker);
+                place.marker = marker;
                 resizeBounds.extend(marker.getPosition());
             });
         })
         map.fitBounds(resizeBounds);
+        
     }, [places]);
 
+    // const renderSearchButton = () => {
+    //     if (mapLoaded) {
+    //         return (<SearchButton box={searchForBox}/>);
+    //     }
+        
+    //     return null;
+    // }
+
     return (
-        <input ref={searchForEl} className="form-control" id="searchFor" aria-describedby="search for" placeholder="Pizza near me"/>
+        <div className="w-100">
+            <input ref={searchForEl} className="form-control" id="searchFor" aria-describedby="search for" placeholder="Pizza near me"/>
+            {/* {renderSearchButton()} */}
+        </div>
     );
 }
 

@@ -24,7 +24,8 @@ const Content = ({map, places}) => {
                 user_ratings_total: place.review_count,
                 price_level: place.price ? place.price.length : 0,
                 place_id: place.alias, // id for fetching more details
-                id: place.id // id used by markers to auto-scroll
+                id: place.id,
+                marker: place.marker
             });
         })
         setCombinedPlaces(places.googlePlaces.concat(uniqueYelpPlaces));

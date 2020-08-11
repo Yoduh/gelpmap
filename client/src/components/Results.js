@@ -45,7 +45,7 @@ const Results = ({places, googleService}) => {
     
     const renderPlaces = _.isEmpty(places) ? null : places.map((place, index) => {
         return (
-            <div key={place.place_id} id={place.id}>
+            <div key={place.place_id} id={place.place_id}>
                 <hr />
                 <div id="accordion">
                     <div className="card bg-transparent">
@@ -60,7 +60,9 @@ const Results = ({places, googleService}) => {
                             <button className="btn btn-outline-primary" 
                                     data-toggle="collapse" data-target={`#collapse${index}`} 
                                     aria-expanded="false" aria-controls={`collapse${index}`} 
-                                    onClick={() => setPlacesClicked( _.union(placesClicked, [place.place_id]) ) }>
+                                    onClick={() => { 
+                                        setPlacesClicked( _.union(placesClicked, [place.place_id]) ); 
+                                        window.google.maps.event.trigger(place.marker, 'click' ); }}>
                                         Show more
                             </button>
                         </div>
@@ -81,7 +83,7 @@ const Results = ({places, googleService}) => {
         <div className="text-center">
             <div className="card-columns d-flex flex-column">
                 {renderPlaces}
-                <hr className="mx-4" />
+                <hr />
             </div>
         </div>
     );

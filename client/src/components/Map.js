@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const Map = ({map, setMap}) => {
     const [location, setLocation] = useState({lat: 35.779791, lng:-78.638149});
-    const [errorMessage, setErrorMessage] = useState('');
     const googleMapRef = useRef(null);
     const googleMap = useRef(null);
 
@@ -27,7 +26,7 @@ const Map = ({map, setMap}) => {
         googleMapScript.addEventListener('load', () => { googleMap.current = initMap(); });
         window.navigator.geolocation.getCurrentPosition(
             position => setLocation({lat: position.coords.latitude, lng: position.coords.longitude}), //success callback
-            err => setErrorMessage(err.message) //failure callback
+            err => console.log(err.message) //failure callback
         );
     }, []);
 
